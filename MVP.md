@@ -1,5 +1,7 @@
 # 🧭 OmegaTrader MVP Roadmap
 
+As I progress along this jounrey I will also be learning what these concepts in finance are along the implemenation in C++
+
 ## ✅ Stage 1: Core Order Book
 📌 *Foundation of everything: no matching yet, just clean storage.*
 
