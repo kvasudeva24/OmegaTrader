@@ -19,7 +19,7 @@ private:
 
 public:
     //default
-    Order(int q, double p, Side s);
+    Order(int id, int q, double p, Side s);
 
     //copy
     Order(Order& other);
