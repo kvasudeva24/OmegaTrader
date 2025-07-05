@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include "Order.hpp"
+#include <iostream>
 
 TEST_CASE("Order constructor sets fields correctly", "[Order]") {
     Order o(1, 100, 42.5, Side::BUY);
@@ -51,6 +52,7 @@ TEST_CASE("Setters modify quantity and price", "[Order]") {
     Order o(4, 10, 5.0, Side::BUY);
     o.setQuantity(25);
     o.setPrice(8.75);
+    cout << o.toString() << endl;
     REQUIRE(o.getQuantity() == 25);
     REQUIRE(o.getPrice() == (8.75));
 }

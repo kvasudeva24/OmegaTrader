@@ -6,7 +6,7 @@ Will add links of resources about where I learned everything.
 ## ✅ Stage 1: Core Order Book
 📌 *Foundation of everything: no matching yet, just clean storage.*
 
-- Define an `Order` (ID, side, price, quantity)
+- Define an `Order` (ID, side, price, quantity) --> CodingJesus
 - Build the data structure to store orders
   - Buy side: sorted descending
   - Sell side: sorted ascending

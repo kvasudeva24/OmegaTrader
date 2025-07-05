@@ -45,3 +45,21 @@ void Order::setPrice(double p){
     price = p;
     return;
 }
+
+string Order::toString(){
+    string ret = "";
+    switch(side){
+        case (Side::BUY):
+            ret = "Buy";
+            break;
+        case (Side::SELL):
+            ret = "Sell";
+            break;
+        default:
+            ret = "Unknown";
+            break;
+    }
+
+
+    return "ID: " + to_string(id) + " -- Quantity: " + to_string(quantity) + " -- Price: " + to_string(price) + " -- Side: " + ret;
+}
