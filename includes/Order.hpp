@@ -1,8 +1,9 @@
 #pragma once
+#include <string>
 
 using namespace std;
 
-enum Side {
+enum class Side {
     BUY,
     SELL
 };
@@ -10,7 +11,38 @@ enum Side {
 
 class Order {
 
+private:
+    int id;
+    int quantity;
+    double price;
+    Side side;
 
+public:
+    //default
+    Order(int q, double p, Side s);
+
+    //copy
+    Order(Order& other);
+
+    //copy assignment 
+    Order& operator=(Order& other);
+
+    //move
+    Order(Order&& other) = default;
+
+    //move assignment
+    Order& operator=(Order&& other) = default;
 
     
+    //getter and setters
+    int getID() const;
+    int getQuantity() const;
+    double getPrice() const;
+    Side getSide() const;
+
+    void setQuantity(int q);
+    void setPrice(double p);
+
+    string toString();
+
 };
