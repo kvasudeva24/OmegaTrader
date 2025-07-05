@@ -22,5 +22,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Catch2)
 
 #add test executable
-add_executable(tests tests/test_orderbook.cpp)
+add_executable(tests
+    tests/test_order.cpp
+    src/Order.cpp
+)
+
+target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/includes)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
