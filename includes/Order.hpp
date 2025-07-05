@@ -19,13 +19,13 @@ private:
 
 public:
     //default
-    Order(int id, int q, double p, Side s);
+    Order(int i, int q, double p, Side s);
 
     //copy
-    Order(Order& other);
+    Order(int i, const Order& other);
 
     //copy assignment 
-    Order& operator=(Order& other);
+    Order& operator=(const Order& other);
 
     //move
     Order(Order&& other) = default;
