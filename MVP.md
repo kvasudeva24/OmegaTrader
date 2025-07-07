@@ -12,7 +12,7 @@ Will add links of resources about where I learned everything.
   - Sell side: sorted ascending
 - Add orders and print the current state
 
-**🔍 Learn**: `std::map`, `std::vector`, enums, file structure
+**🔍 Learn**: `std::map`, `std::queue`, enums, file structure
 
 ---
 
