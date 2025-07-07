@@ -24,7 +24,7 @@ void OrderBook::checkAskBook(Order& order){
         } else {
             // CASE 2: order q > best ask q --> need to fullfill as much as possible
             //while the map isnt empty, order has q, and it crosses the line
-            while(!ask_book.empty() && order.getQuantity() > 0 && order.getPrice() > ask_book.begin()->first){
+            while(!ask_book.empty() && order.getQuantity() > 0 && order.getPrice() >= ask_book.begin()->first){
                 //get the best ask inside the loop to avoid overriting
                 Order& best_ask = getBestAsk();
 
@@ -63,5 +63,72 @@ void OrderBook::insertBuyOrder(Order& order){
         bid_book[order.getPrice()] = q;
     } else {
         bid_book[order.getPrice()].push(order);
+    }
+}
+
+void OrderBook::createSellOrder(int q, double p){
+    //first create the order 
+    Order order = {next_id_counter++, q, p, Side::SELL};
+
+    //if the bid book isnt empty then we can check if the
+    //order crosses the line 
+    if(!bid_book.empty()){
+        checkBidBook(order);
+    } else {
+        insertSellOrder(order);
+    }
+}
+
+
+void OrderBook::checkBidBook(Order& order){
+    Order& curr_best = getBestBid();
+
+    //check if crosses
+    if(order.getPrice() <= bid_book.begin()->first){
+        //CASE 1: best bid q > order q
+        if(curr_best.getQuantity() > order.getQuantity()){
+            curr_best.setQuantity(curr_best.getQuantity() - order.getQuantity());
+        } else {
+            // CASE 2: order q > best bid q --> need to fullfill as much as possible
+            //while the map isnt empty, order has q, and it crosses the line
+            while(!bid_book.empty() && order.getQuantity() > 0 && order.getPrice() <= bid_book.begin()->first){
+                //get the best bid inside the loop to avoid overriting
+                Order& best_bid = getBestBid();
+
+                //fill the order as much as poss
+                order.setQuantity(order.getQuantity() - best_bid.getQuantity());
+
+                //if the price we filled at is the only one erase it so we can deref prop
+                if(bid_book.begin()->second.size() == 1){
+                    bid_book.begin()->second.pop(); //queue space will be reclaimed but safe practice
+                    bid_book.erase(bid_book.begin()->first);
+                } else {
+                    //pop from queue
+                    bid_book.begin()->second.pop();
+                }  
+            }
+
+            //if the order was fully matched we are good if not insert 
+            if(order.getQuantity() > 0){
+                insertSellOrder(order);
+            }
+
+        }
+    } else {
+        //it doesnt cross, add order
+        insertSellOrder(order);
+    }
+}
+
+Order& OrderBook::getBestBid(){
+    return bid_book.begin()->second.front();
+}
+
+void OrderBook::insertSellOrder(Order& order){
+    if(ask_book.find(order.getPrice()) == ask_book.end()){
+        queue<Order> q; q.push(order);
+        ask_book[order.getPrice()] = q;
+    } else {
+        ask_book[order.getPrice()].push(order);
     }
 }

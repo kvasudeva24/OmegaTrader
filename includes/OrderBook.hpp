@@ -19,4 +19,9 @@ public:
     void checkAskBook(Order& order);
 
     Order& getBestAsk();
+
+    void createSellOrder(int q, double p);
+    void insertSellOrder(Order& order);
+    void checkBidBook(Order& order);
+    Order& getBestBid();
 };
