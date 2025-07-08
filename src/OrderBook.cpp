@@ -33,11 +33,11 @@ void OrderBook::checkAskBook(Order& order){
 
                 //if the price we filled at is the only one erase it so we can deref prop
                 if(ask_book.begin()->second.size() == 1){
-                    ask_book.begin()->second.pop(); //queue space will be reclaimed but safe practice
+                    ask_book.begin()->second.pop_front(); //queue space will be reclaimed but safe practice
                     ask_book.erase(ask_book.begin()->first);
                 } else {
                     //pop from queue
-                    ask_book.begin()->second.pop();
+                    ask_book.begin()->second.pop_front();
                 }  
             }
 
@@ -59,10 +59,10 @@ Order& OrderBook::getBestAsk(){
 
 void OrderBook::insertBuyOrder(Order& order){
     if(bid_book.find(order.getPrice()) == bid_book.end()){
-        queue<Order> q; q.push(order);
-        bid_book[order.getPrice()] = q;
+        list<Order> list; list.push_back(order);
+        bid_book[order.getPrice()] = list;
     } else {
-        bid_book[order.getPrice()].push(order);
+        bid_book[order.getPrice()].push_back(order);
     }
 }
 
@@ -100,11 +100,11 @@ void OrderBook::checkBidBook(Order& order){
 
                 //if the price we filled at is the only one erase it so we can deref prop
                 if(bid_book.begin()->second.size() == 1){
-                    bid_book.begin()->second.pop(); //queue space will be reclaimed but safe practice
+                    bid_book.begin()->second.pop_front(); //list space will be reclaimed but safe practice
                     bid_book.erase(bid_book.begin()->first);
                 } else {
                     //pop from queue
-                    bid_book.begin()->second.pop();
+                    bid_book.begin()->second.pop_front();
                 }  
             }
 
@@ -126,9 +126,9 @@ Order& OrderBook::getBestBid(){
 
 void OrderBook::insertSellOrder(Order& order){
     if(ask_book.find(order.getPrice()) == ask_book.end()){
-        queue<Order> q; q.push(order);
-        ask_book[order.getPrice()] = q;
+        list<Order> list; list.push_back(order);
+        ask_book[order.getPrice()] = list;
     } else {
-        ask_book[order.getPrice()].push(order);
+        ask_book[order.getPrice()].push_back(order);
     }
-}
+}   

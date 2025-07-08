@@ -1,13 +1,15 @@
 #pragma once
 #include "Order.hpp"
 #include <map>
-#include <queue>
+#include <list>
 
 class OrderBook {
 private:
     int next_id_counter = 1;
-    map<double, queue<Order>> ask_book;
-    map<double, queue<Order>, greater<double>> bid_book;
+    map<double, list<Order>> ask_book;
+    map<double, list<Order>, greater<double>> bid_book;
+
+    unordered_map<int, tuple<double, Side, list<Order>::iterator>> id_map;
 
 
 
