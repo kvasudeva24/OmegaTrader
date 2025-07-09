@@ -23,8 +23,8 @@ FetchContent_MakeAvailable(Catch2)
 
 #add test executable
 add_executable(tests
-    tests/test_order.cpp
-    src/Order.cpp
+    tests/test_orderbook.cpp
+    src/OrderBook.cpp
 )
 
 target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/includes)

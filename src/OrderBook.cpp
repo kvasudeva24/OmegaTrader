@@ -134,17 +134,12 @@ void OrderBook::cancelOrder(int id){
     if(id_map.find(id) == id_map.end()) throw invalid_argument("Id does not exist");
 
     auto [price, side, it] = id_map[id];
-    switch(side){
-        case(Side::BUY):
-            auto& order_list = bid_book[price];
-            order_list.erase(it);
-            if(order_list.empty()) bid_book.erase(price);
-            break;
-        case(Side::SELL):
-            auto& order_list = ask_book[price];
-            order_list.erase(it);
-            if(order_list.empty()) ask_book.erase(price);
-            break;
+    if(side == Side::BUY){
+        bid_book[price].erase(it);
+        if(bid_book[price].empty()) bid_book.erase(price);
+    } else {
+        ask_book[price].erase(it);
+        if(ask_book[price].empty()) ask_book.erase(price);
     }
     id_map.erase(id);
 }
