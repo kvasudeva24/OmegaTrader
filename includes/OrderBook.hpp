@@ -26,4 +26,6 @@ public:
     void insertSellOrder(Order& order);
     void checkBidBook(Order& order);
     Order& getBestBid();
+
+    void cancelOrder(int id);
 };
