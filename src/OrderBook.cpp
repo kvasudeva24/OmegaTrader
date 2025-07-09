@@ -58,12 +58,9 @@ Order& OrderBook::getBestAsk(){
 }
 
 void OrderBook::insertBuyOrder(Order& order){
-    if(bid_book.find(order.getPrice()) == bid_book.end()){
-        list<Order> list; list.push_back(order);
-        bid_book[order.getPrice()] = list;
-    } else {
-        bid_book[order.getPrice()].push_back(order);
-    }
+    auto& order_list = bid_book[order.getPrice()];
+    auto it = order_list.insert(order_list.end(), order);
+    id_map[order.getID()] = {order.getPrice(), order.getSide(), it};
 }
 
 void OrderBook::createSellOrder(int q, double p){
@@ -125,10 +122,7 @@ Order& OrderBook::getBestBid(){
 }
 
 void OrderBook::insertSellOrder(Order& order){
-    if(ask_book.find(order.getPrice()) == ask_book.end()){
-        list<Order> list; list.push_back(order);
-        ask_book[order.getPrice()] = list;
-    } else {
-        ask_book[order.getPrice()].push_back(order);
-    }
+    auto& order_list = ask_book[order.getPrice()];
+    auto it = order_list.insert(order_list.end(), order);
+    id_map[order.getID()] = {order.getPrice(), order.getSide(), it};
 }
