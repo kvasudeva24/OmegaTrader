@@ -43,6 +43,6 @@ public:
     void setQuantity(int q);
     void setPrice(double p);
 
-    string toString();
+    string toString() const;
 
 };

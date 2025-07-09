@@ -28,4 +28,7 @@ public:
     Order& getBestBid();
 
     void cancelOrder(int id);
+
+    void printBidBook();
+    void printAskBook();
 };

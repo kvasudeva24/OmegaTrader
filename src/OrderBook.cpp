@@ -1,6 +1,7 @@
 #include "OrderBook.hpp"
 
 #include <stdexcept>
+#include <iostream>
 
 void OrderBook::createBuyOrder(int q, double p){
     //first create the order 
@@ -146,4 +147,30 @@ void OrderBook::cancelOrder(int id){
             break;
     }
     id_map.erase(id);
+}
+
+void OrderBook::printBidBook(){
+    if(bid_book.empty()){
+        cout << "Bid book is empty;" << endl;
+        return;
+    } 
+
+    for(const auto [price, list] : bid_book){
+        for(const auto& order : list){
+            cout << order.toString() << endl;
+        }
+    }
+}
+
+void OrderBook::printAskBook(){
+    if(ask_book.empty()){
+        cout << "Ask book is empty;" << endl;
+        return;
+    }
+
+    for(const auto& [price, list] : ask_book){
+        for(const auto& order : list){
+            cout << order.toString() << endl;
+        }
+    }
 }
