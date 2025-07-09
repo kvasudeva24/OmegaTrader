@@ -21,7 +21,7 @@ public:
     //default
     Order(int i, int q, double p, Side s);
 
-    //copy
+    //copy data but have unique id
     Order(int i, const Order& other);
 
     //copy assignment 

@@ -46,7 +46,7 @@ void Order::setPrice(double p){
     return;
 }
 
-string Order::toString(){
+string Order::toString() const {
     string ret = "";
     switch(side){
         case (Side::BUY):
