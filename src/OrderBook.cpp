@@ -2,37 +2,38 @@
 
 #include <stdexcept>
 #include <iostream>
+#include <memory>
 
 void OrderBook::createBuyOrder(int q, double p){
-    //first create the order 
-    Order order = {next_id_counter++, q, p, Side::BUY};
+    //first create the order ptr
+    unique_ptr<Order> ptr = make_unique<Order>(next_id_counter++, q, p, Side::BUY);
 
     //if the ask book isnt empty then we can check if the
     //order crosses the line 
     if(!ask_book.empty()){
-        checkAskBook(order);
+        //because you can move ptr once it is valid with if/else
+        checkAskBook(std::move(ptr));
     } else {
-        insertBuyOrder(order);
+        insertBuyOrder(std::move(ptr));
     }
 }
 
-void OrderBook::checkAskBook(Order& order){
-    Order& curr_best = getBestAsk();
+void OrderBook::checkAskBook(unique_ptr<Order> ptr){
 
     //check if crosses
-    if(order.getPrice() >= ask_book.begin()->first){
+    if(ptr->getPrice() >= ask_book.begin()->first){
         //CASE 1: best ask q > order q
-        if(curr_best.getQuantity() > order.getQuantity()){
-            curr_best.setQuantity(curr_best.getQuantity() - order.getQuantity());
+        if(getBestAsk().getQuantity() > ptr->getQuantity()){
+            getBestAsk().setQuantity(getBestAsk().getQuantity() - ptr->getQuantity());
         } else {
             // CASE 2: order q > best ask q --> need to fullfill as much as possible
             //while the map isnt empty, order has q, and it crosses the line
-            while(!ask_book.empty() && order.getQuantity() > 0 && order.getPrice() >= ask_book.begin()->first){
+            while(!ask_book.empty() && ptr->getQuantity() > 0 && ptr->getPrice() >= ask_book.begin()->first){
                 //get the best ask inside the loop to avoid overriting
                 Order& best_ask = getBestAsk();
 
                 //fill the order as much as poss
-                order.setQuantity(order.getQuantity() - best_ask.getQuantity());
+                ptr->setQuantity(ptr->getQuantity() - best_ask.getQuantity());
 
                 //if the price we filled at is the only one erase it so we can deref prop
                 if(ask_book.begin()->second.size() == 1){
@@ -45,58 +46,61 @@ void OrderBook::checkAskBook(Order& order){
             }
 
             //if the order was fully matched we are good if not insert 
-            if(order.getQuantity() > 0){
-                insertBuyOrder(order);
+            if(ptr->getQuantity() > 0){
+                insertBuyOrder(std::move(ptr));
             }
 
         }
     } else {
         //it doesnt cross, add order
-        insertBuyOrder(order);
+        insertBuyOrder(std::move(ptr));
     }
 }
 
 Order& OrderBook::getBestAsk(){
-    return ask_book.begin()->second.front();
+    return *(ask_book.begin()->second.front());
 }
 
-void OrderBook::insertBuyOrder(Order& order){
-    auto& order_list = bid_book[order.getPrice()];
-    auto it = order_list.insert(order_list.end(), order);
-    id_map[order.getID()] = {order.getPrice(), order.getSide(), it};
+void OrderBook::insertBuyOrder(unique_ptr<Order> ptr){
+    int id = ptr->getID();
+    double price = ptr->getPrice();
+    Side side = ptr->getSide();
+
+    auto& order_list = bid_book[price];
+    auto it = order_list.insert(order_list.end(), std::move(ptr));
+    id_map[id] = {price, side, it};
 }
 
 void OrderBook::createSellOrder(int q, double p){
-    //first create the order 
-    Order order = {next_id_counter++, q, p, Side::SELL};
+    //first create the order ptr
+    unique_ptr<Order> ptr = make_unique<Order>(next_id_counter++, q, p, Side::SELL);
 
     //if the bid book isnt empty then we can check if the
     //order crosses the line 
     if(!bid_book.empty()){
-        checkBidBook(order);
+        checkBidBook(std::move(ptr));
     } else {
-        insertSellOrder(order);
+        insertSellOrder(std::move(ptr));
     }
 }
 
 
-void OrderBook::checkBidBook(Order& order){
-    Order& curr_best = getBestBid();
+void OrderBook::checkBidBook(unique_ptr<Order> ptr){
 
     //check if crosses
-    if(order.getPrice() <= bid_book.begin()->first){
+    if(ptr->getPrice() <= bid_book.begin()->first){
         //CASE 1: best bid q > order q
-        if(curr_best.getQuantity() > order.getQuantity()){
-            curr_best.setQuantity(curr_best.getQuantity() - order.getQuantity());
+        if(getBestBid().getQuantity() > ptr->getQuantity()){
+            getBestBid().setQuantity(getBestBid().getQuantity() - ptr->getQuantity());
         } else {
             // CASE 2: order q > best bid q --> need to fullfill as much as possible
             //while the map isnt empty, order has q, and it crosses the line
-            while(!bid_book.empty() && order.getQuantity() > 0 && order.getPrice() <= bid_book.begin()->first){
+            while(!bid_book.empty() && ptr->getQuantity() > 0 && ptr->getPrice() <= bid_book.begin()->first){
                 //get the best bid inside the loop to avoid overriting
                 Order& best_bid = getBestBid();
 
                 //fill the order as much as poss
-                order.setQuantity(order.getQuantity() - best_bid.getQuantity());
+                ptr->setQuantity(ptr->getQuantity() - best_bid.getQuantity());
 
                 //if the price we filled at is the only one erase it so we can deref prop
                 if(bid_book.begin()->second.size() == 1){
@@ -109,25 +113,29 @@ void OrderBook::checkBidBook(Order& order){
             }
 
             //if the order was fully matched we are good if not insert 
-            if(order.getQuantity() > 0){
-                insertSellOrder(order);
+            if(ptr->getQuantity() > 0){
+                insertSellOrder(std::move(ptr));
             }
 
         }
     } else {
         //it doesnt cross, add order
-        insertSellOrder(order);
+        insertSellOrder(std::move(ptr));
     }
 }
 
 Order& OrderBook::getBestBid(){
-    return bid_book.begin()->second.front();
+    return *(bid_book.begin()->second.front());
 }
 
-void OrderBook::insertSellOrder(Order& order){
-    auto& order_list = ask_book[order.getPrice()];
-    auto it = order_list.insert(order_list.end(), order);
-    id_map[order.getID()] = {order.getPrice(), order.getSide(), it};
+void OrderBook::insertSellOrder(unique_ptr<Order> ptr){
+    int id = ptr->getID();
+    double price = ptr->getPrice();
+    Side side = ptr->getSide();
+
+    auto& order_list = ask_book[price];
+    auto it = order_list.insert(order_list.end(), std::move(ptr));
+    id_map[id] = {price, side, it};
 }
 
 void OrderBook::cancelOrder(int id){
@@ -135,11 +143,13 @@ void OrderBook::cancelOrder(int id){
 
     auto [price, side, it] = id_map[id];
     if(side == Side::BUY){
-        bid_book[price].erase(it);
-        if(bid_book[price].empty()) bid_book.erase(price);
+        auto& list = bid_book[price];
+        list.erase(it);
+        if(list.empty()) bid_book.erase(price);
     } else {
-        ask_book[price].erase(it);
-        if(ask_book[price].empty()) ask_book.erase(price);
+        auto& list = ask_book[price];
+        list.erase(it);
+        if(list.empty()) ask_book.erase(price);
     }
     id_map.erase(id);
 }
@@ -150,9 +160,9 @@ void OrderBook::printBidBook(){
         return;
     } 
 
-    for(const auto [price, list] : bid_book){
-        for(const auto& order : list){
-            cout << order.toString() << endl;
+    for(const auto& [price, list] : bid_book){
+        for(const auto& ptr : list){
+            cout << ptr->toString() << endl;
         }
     }
 }
@@ -164,8 +174,8 @@ void OrderBook::printAskBook(){
     }
 
     for(const auto& [price, list] : ask_book){
-        for(const auto& order : list){
-            cout << order.toString() << endl;
+        for(const auto& ptr : list){
+            cout << ptr->toString() << endl;
         }
     }
 }
