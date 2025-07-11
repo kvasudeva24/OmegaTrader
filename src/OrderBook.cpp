@@ -58,6 +58,7 @@ void OrderBook::checkAskBook(unique_ptr<Order> ptr){
 }
 
 Order& OrderBook::getBestAsk(){
+    if(ask_book.empty()) throw out_of_range("Book is empty");
     return *(ask_book.begin()->second.front());
 }
 
@@ -125,6 +126,7 @@ void OrderBook::checkBidBook(unique_ptr<Order> ptr){
 }
 
 Order& OrderBook::getBestBid(){
+    if(bid_book.empty()) throw out_of_range("Book is empty");
     return *(bid_book.begin()->second.front());
 }
 
