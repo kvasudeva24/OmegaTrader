@@ -4,6 +4,7 @@
         "map": "cpp",
         "list": "cpp",
         "iostream": "cpp",
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "deque": "cpp"
     }
 }
