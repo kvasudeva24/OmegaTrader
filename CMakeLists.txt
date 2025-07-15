@@ -1,32 +1,40 @@
-#set the min required version
+# Set the minimum required version
 cmake_minimum_required(VERSION 3.15)
 
-#set the project name internally
+# Set the project name internally
 project(OmegaTrader)
 
-#using c++20 and make sure
+# Use C++20 and enforce standard
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#to add Catch2 test suite
+# Include FetchContent to pull in external dependencies
 include(FetchContent)
 
-#add catch2
+# Add Catch2 using FetchContent
 FetchContent_Declare(
     Catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG        v3.5.4
 )
 
-#download build and make catch2 usuable
+# Download, build, and make Catch2 usable
 FetchContent_MakeAvailable(Catch2)
 
-#add test executable
+
+# Add test executable
 add_executable(tests
-    tests/test_orderbook.cpp
-    src/OrderBook.cpp
-    src/Order.cpp
+tests/test_SMA.cpp
+src/SMA.cpp
+src/OrderBook.cpp
+src/Order.cpp
 )
 
-target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/includes)
+# Add include directories
+target_include_directories(tests PRIVATE
+    ${CMAKE_SOURCE_DIR}/includes
+    ${catch2_SOURCE_DIR}/src
+)
+
+# Link Catch2 to the test executable
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)

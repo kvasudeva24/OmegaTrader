@@ -14,6 +14,10 @@ private:
 
 
 public:
+    OrderBook() = default;
+    OrderBook(const OrderBook& rhs) = delete;
+    OrderBook& operator=(const OrderBook& rhs) = delete;
+
     void createBuyOrder(int q, double p);
     void insertBuyOrder(unique_ptr<Order> ptr);
     void checkAskBook(unique_ptr<Order> ptr);
