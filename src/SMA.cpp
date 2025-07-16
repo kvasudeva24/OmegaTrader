@@ -22,6 +22,8 @@ SMA& SMA::operator=(const SMA& rhs){
 
 void SMA::setSize(int s){
     size = s;
+    sliding_window = deque<double> ();
+    moving_average = 0.0;
 }
 
 double SMA::getMovingAverage() const {

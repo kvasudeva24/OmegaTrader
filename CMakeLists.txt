@@ -33,7 +33,7 @@ src/Order.cpp
 # Add include directories
 target_include_directories(tests PRIVATE
     ${CMAKE_SOURCE_DIR}/includes
-    ${catch2_SOURCE_DIR}/src
+    ${catch2_SOURCE_DIR}/include
 )
 
 # Link Catch2 to the test executable
