@@ -63,8 +63,8 @@ TEST_CASE("SMA setSize resets sliding window and moving average", "[SMA]") {
 
     sma.setSize(1); // should clear old data
     REQUIRE(sma.getSize() == 1);
-    REQUIRE(sma.getSlidingWindow().empty());
-    REQUIRE(sma.getMovingAverage() ==  (0.0));
+    REQUIRE(sma.getSlidingWindow().size() == 1);
+    REQUIRE(sma.getMovingAverage() ==  (20));
 }
 
 TEST_CASE("SMA handles multiple insertions with same price", "[SMA]") {
