@@ -1,21 +1,22 @@
-//define a SMA strategy
+//define a WMA strategy
 #pragma once
 #include "Strategy.hpp"
 #include <queue>
 
 
-class SMA : public Strategy {
+class WMA : public Strategy {
 
 private:
     deque<double> sliding_window;
     int size;
     double moving_average = 0;
+    int total_weight;
 
 public:
-    SMA(int size);
-    SMA(const SMA& rhs);
-    SMA& operator=(const SMA& rhs);
-    virtual ~SMA() = default;
+    WMA(int size);
+    WMA(const WMA& rhs);
+    WMA& operator=(const WMA& rhs);
+    virtual ~WMA() = default;
 
     virtual void onMarketData(double price, int quantity, OrderBook& Ob) override;
 
@@ -26,4 +27,5 @@ public:
     double getMovingAverage() const;
     int getSize() const;
     deque<double> getSlidingWindow() const;
+    int getTotalWeight() const;
 };
