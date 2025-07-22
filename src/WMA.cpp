@@ -66,10 +66,8 @@ void WMA::setSize(int s){
     if(s > size){
         size = s;
     } else {
-        int n = 0;
-        while(n<s){
+        while(sliding_window.size() > s){
             sliding_window.pop_front();
-            n++;
         }
         updateMovingAverage();
         size = s;
