@@ -10,7 +10,6 @@ private:
     deque<double> sliding_window;
     int size;
     double moving_average = 0;
-    int total_weight;
 
 public:
     WMA(int size);
@@ -27,5 +26,4 @@ public:
     double getMovingAverage() const;
     int getSize() const;
     deque<double> getSlidingWindow() const;
-    int getTotalWeight() const;
 };
