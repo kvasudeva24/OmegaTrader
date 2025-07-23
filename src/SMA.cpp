@@ -55,14 +55,16 @@ void SMA::onMarketData(double price, int quantity, OrderBook& Ob) {
         updateMovingAverage();
         return;
     }
+    double oldSMA = getMovingAverage();
     double last_price = sliding_window.back();
     sliding_window.pop_front();
     sliding_window.push_back(price);
     updateMovingAverage();
+    double newSMA = getMovingAverage();
 
-    if(last_price < price && price > getMovingAverage()){
+    if(last_price < oldSMA && price > newSMA){
         Ob.createBuyOrder(quantity, price);
-    } else if (last_price > price && price < getMovingAverage()){
+    } else if (last_price > oldSMA && price < newSMA){
         Ob.createSellOrder(quantity, price);
     }
 

@@ -37,13 +37,16 @@ void WMA::onMarketData(double price, int quantity, OrderBook& Ob){
         updateMovingAverage();
         return;
     }
+    double oldWMA = getMovingAverage();
     double last_price = sliding_window.back();
     sliding_window.pop_front();
     sliding_window.push_back(price);
     updateMovingAverage();
-    if(last_price < price && price > getMovingAverage()){
+    double newWMA = getMovingAverage();
+
+    if(last_price < oldWMA && price > newWMA){
         Ob.createBuyOrder(quantity, price);
-    } else if (price < last_price && price < getMovingAverage()){
+    } else if (last_price > oldWMA && price < newWMA){
         Ob.createSellOrder(quantity, price);
     }
 
