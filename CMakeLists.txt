@@ -24,8 +24,8 @@ FetchContent_MakeAvailable(Catch2)
 
 # Add test executable
 add_executable(tests
-tests/test_WMA.cpp
-src/WMA.cpp
+tests/test_EMA.cpp
+src/EMA.cpp
 src/OrderBook.cpp
 src/Order.cpp
 )
