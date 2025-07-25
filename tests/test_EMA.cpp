@@ -3,7 +3,6 @@
 #include <OrderBook.hpp>
 #include <Strategy.hpp>
 #include <EMA.hpp>
-#include <queue>
 
 
 
@@ -12,13 +11,13 @@ TEST_CASE("Create EMA and test private member variables", "[EMA]"){
     EMA e1 = EMA(25);
     REQUIRE(e1.getMovingAverage() == 0.0);
     REQUIRE(e1.getSize() == 25);
-    REQUIRE(e1.getSlidingWindow() == deque<double>());
+    REQUIRE(e1.getSlidingWindow().empty());
     REQUIRE(e1.getK() == 2);
 }
 
 TEST_CASE("Moving average works correctly", "[EMA]"){
     OrderBook ob;
-    EMA e1 = EMA(25);
+    EMA e1 = EMA(3);
 
     e1.onMarketData(10.0, 1, ob);
     REQUIRE(e1.getMovingAverage() == 10.0);

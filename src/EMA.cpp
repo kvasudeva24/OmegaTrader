@@ -60,7 +60,7 @@ void EMA::updateMovingAverage(){
         moving_average = *(sliding_window.begin());
         return;
     } else {
-        double alpha = k/(sliding_window.size() + 1);
+        double alpha = k/(getSize() + 1);
         moving_average = (moving_average * (1 - alpha)) + (alpha * sliding_window.back());
     }
 }
