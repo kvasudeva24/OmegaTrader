@@ -27,3 +27,20 @@ TEST_CASE("Moving average works correctly", "[EMA]"){
     REQUIRE(e1.getMovingAverage() == 22.5);
 }
 
+TEST_CASE("Set Size overrites higher/lower size correctly", "[EMA]"){
+    OrderBook ob;
+    EMA e1 = EMA(3);
+
+    e1.onMarketData(10.0, 1, ob);
+    REQUIRE(e1.getMovingAverage() == 10.0);
+    e1.onMarketData(20.0, 1, ob);
+    REQUIRE(e1.getMovingAverage() == 15.0);
+    e1.onMarketData(30.0, 1, ob);
+    REQUIRE(e1.getMovingAverage() == 22.5);
+
+    e1.setSize(1);
+    REQUIRE(e1.getMovingAverage() == 30.0);
+
+    REQUIRE_THROWS_AS(e1.setSize(2), invalid_argument);
+}
+

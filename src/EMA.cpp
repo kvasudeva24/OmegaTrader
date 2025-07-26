@@ -1,4 +1,5 @@
 #include "EMA.hpp"
+#include <stdexcept>
 
 EMA::EMA(int s) : size(s) {}
 
@@ -67,7 +68,7 @@ void EMA::updateMovingAverage(){
 
 void EMA::setSize(int s){
     if(s > size){
-        size = s;
+        throw invalid_argument("Cannot set window size to greater than current");
     } else {
         while(sliding_window.size() > s){
             sliding_window.pop_front();
