@@ -181,3 +181,11 @@ void OrderBook::printAskBook(){
         }
     }
 }
+
+const map<double, list<unique_ptr<Order>>, greater<double>>& OrderBook::getBidBook() const {
+    return bid_book;
+}
+
+const map<double, list<unique_ptr<Order>>>& OrderBook::getAskBook() const {
+    return ask_book;
+}

@@ -44,3 +44,22 @@ TEST_CASE("Set Size overrites higher/lower size correctly", "[EMA]"){
     REQUIRE_THROWS_AS(e1.setSize(2), invalid_argument);
 }
 
+TEST_CASE("Triggers buy signal", "[EMA]"){
+    OrderBook ob;
+    EMA e1 = EMA(5);
+
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    REQUIRE(e1.getMovingAverage() == 10.0);
+    e1.onMarketData(9.5, 1, ob);
+    //buy signal happens here 
+    e1.onMarketData(10.8, 1, ob);
+    REQUIRE(!ob.getBidBook().empty());
+
+}
+
+
+

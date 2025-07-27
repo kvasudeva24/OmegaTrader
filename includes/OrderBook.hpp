@@ -32,4 +32,8 @@ public:
 
     void printBidBook();
     void printAskBook();
+
+    const map<double, list<unique_ptr<Order>>, greater<double>>& getBidBook() const;
+
+    const map<double, list<unique_ptr<Order>>>& getAskBook() const;
 };
