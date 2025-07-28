@@ -61,5 +61,22 @@ TEST_CASE("Triggers buy signal", "[EMA]"){
 
 }
 
+TEST_CASE("Triggers sell signal", "[EMA]"){
+    OrderBook ob;
+    EMA e1 = EMA(5);
+
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    e1.onMarketData(10.0, 1, ob);
+    REQUIRE(e1.getMovingAverage() == 10.0);
+    e1.onMarketData(10.8, 1, ob);
+    //sell signal happens here 
+    e1.onMarketData(9.2, 1, ob);
+    REQUIRE(!ob.getAskBook().empty());
+
+}
+
 
 
